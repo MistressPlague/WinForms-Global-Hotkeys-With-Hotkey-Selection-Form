@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Launchpad_Manager
+namespace GlobalHotkeys
 {
     public sealed class KeyboardHook : IDisposable
     {
