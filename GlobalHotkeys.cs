@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Launchpad_Manager
@@ -20,14 +16,14 @@ namespace Launchpad_Manager
         /// <summary>
         /// Represents the window that is used internally to get the messages.
         /// </summary>
-        public class Window : NativeWindow, IDisposable
+        public sealed class Window : NativeWindow, IDisposable
         {
             public static int WM_HOTKEY = 0x0312;
 
             public Window()
             {
                 // create the handle for the window.
-                this.CreateHandle(new CreateParams());
+                CreateHandle(new CreateParams());
             }
 
             /// <summary>
@@ -42,8 +38,8 @@ namespace Launchpad_Manager
                 if (m.Msg == WM_HOTKEY)
                 {
                     // get the keys.
-                    Keys key = (Keys)(((int)m.LParam >> 16) & 0xFFFF);
-                    ModifierKeys modifier = (ModifierKeys)((int)m.LParam & 0xFFFF);
+                    var key = (Keys)(((int)m.LParam >> 16) & 0xFFFF);
+                    var modifier = (ModifierKeys)((int)m.LParam & 0xFFFF);
 
                     // invoke the event to notify the parent.
                     if (KeyPressed != null)
@@ -57,7 +53,7 @@ namespace Launchpad_Manager
 
             public void Dispose()
             {
-                this.DestroyHandle();
+                DestroyHandle();
             }
 
             #endregion
@@ -84,7 +80,7 @@ namespace Launchpad_Manager
         public void RegisterHotKey(ModifierKeys modifier, Keys key)
         {
             // increment the counter.
-            _currentId = _currentId + 1;
+            _currentId += 1;
 
             // register the hot key.
             if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key))
@@ -101,7 +97,7 @@ namespace Launchpad_Manager
         public void UnregisterAllHotkeys()
         {
             // unregister all the registered hot keys.
-            for (int i = _currentId; i > 0; i--)
+            for (var i = _currentId; i > 0; i--)
             {
                 UnregisterHotKey(_window.Handle, i);
             }
@@ -110,7 +106,7 @@ namespace Launchpad_Manager
         public void Dispose()
         {
             // unregister all the registered hot keys.
-            for (int i = _currentId; i > 0; i--)
+            for (var i = _currentId; i > 0; i--)
             {
                 UnregisterHotKey(_window.Handle, i);
             }
@@ -136,15 +132,9 @@ namespace Launchpad_Manager
             _key = key;
         }
 
-        public ModifierKeys Modifier
-        {
-            get { return _modifier; }
-        }
+        public ModifierKeys Modifier => _modifier;
 
-        public Keys Key
-        {
-            get { return _key; }
-        }
+        public Keys Key => _key;
     }
 
     /// <summary>
