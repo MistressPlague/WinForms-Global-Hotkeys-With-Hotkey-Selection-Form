@@ -42,7 +42,7 @@ namespace GlobalHotkeys
         void hook_KeyPressed(object sender, KeyPressedEventArgs e)
         {
             // send the hotkey to a method in your main form.
-            var principalForm = Application.OpenForms.OfType<LaunchpadManager>().Single();
+            var principalForm = Application.OpenForms.OfType<YourForm>().Single();
             principalForm.ReceivedHotkeys(e.Modifier, e.Key);
         }
 
